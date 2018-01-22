@@ -14,6 +14,7 @@ jQuery('.room-title').text(room);
 
 socket.on('message', function(message) {
 	var momentTimestamp = moment.utc(message.timestamp);
+	var $nav = jQuery('#nav');
 	var $messages = jQuery('.messages');
 	var $message = jQuery('<li class="list-group-item"></li>');
 	console.log('New message:');
@@ -22,6 +23,13 @@ socket.on('message', function(message) {
 	$message.append('<p><strong>' + message.name + ' ' + momentTimestamp.local().format('h:mm a') + '</strong></p>');
 	$message.append('<p>' + message.text + '</p>');
 	$messages.append($message);
+	var shouldScroll	=	$nav["0"].scrollTop + $nav["0"].clientHeight === $nav["0"].scrollHeight;
+	// console.log($nav["0"].scrollHeight);
+	// console.log($nav["0"].scrollTop);
+	// console.log($nav["0"].clientHeight);
+	if(!shouldScroll){
+		$nav["0"].scrollTop = $nav["0"].scrollHeight;	
+	}
 });
 
 //Hadles submitting of new message

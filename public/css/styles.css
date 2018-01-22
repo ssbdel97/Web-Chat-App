@@ -13,3 +13,8 @@ h1 {
 .messages p {
 	margin: 6px 0;
 }
+
+#nav{
+    max-height: 300px;
+    overflow-y:auto; 
+}
