@@ -1,22 +1,29 @@
 var PORT = process.env.PORT || 3000;
 var express = require('express');
 var app = express();
+var bodyParser = require('body-parser');
 var moment = require('moment');
-
+var db = require('./db.js');
+var _ = require('underscore');
+var bcrypt = require('bcrypt');
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var urlencodedParser = bodyParser.urlencoded({
+	extended: true
+});
+querystring = require('querystring');    
 app.use(express.static(__dirname + '/public'));
 var clientInfo = {};
 //sends current users to provided sockets
 function sendCurrentUsers(socket) {
 	var info = clientInfo[socket.id];
 	var users = [];
-	if(typeof info === 'undefined'){
-		return ;
+	if (typeof info === 'undefined') {
+		return;
 	}
-	Object.keys(clientInfo).forEach(function(socketId){
+	Object.keys(clientInfo).forEach(function(socketId) {
 		var userInfo = clientInfo[socketId];
-		if(info.room === userInfo.room){
+		if (info.room === userInfo.room) {
 			users.push(userInfo.name);
 		}
 	});
@@ -69,7 +76,38 @@ io.on('connection', function(socket) {
 		timestamp: moment().valueOf()
 	});
 });
-
-http.listen(PORT, function() {
-	console.log('Server started!!');
+app.post('/users', urlencodedParser, function(req, res) {
+	var body = _.pick(req.body, 'name');
+	console.log(body);
+	db.user.authenticate(body).then(function(user) {
+		console.log('user');
+		if (!user) {
+			return body;
+		}
+		console.log('to home');
+		res.redirect('/');
+		console.log('testing');
+		res.status(200).send();
+		console.log('testing...');
+	}).then(function(body){
+		return db.user.create(body);
+	}).then(function(user){
+		console.log('Name inserted');
+		//res.redirect('./chat.html');
+		query = querystring.stringify({
+	          "name": body.name,
+	          "room": req.body.room
+	        });
+		res.redirect('./chat.html?'+query);
+	}).catch(function() {
+		console.log('error!');
+		res.status(401).send();
+	});
+});
+db.sequelize.sync({
+	//force: true
+}).then(function() {
+	http.listen(PORT, function() {
+		console.log('Server started!!');
+	})
 });
