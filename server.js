@@ -11,7 +11,7 @@ var io = require('socket.io')(http);
 var urlencodedParser = bodyParser.urlencoded({
 	extended: true
 });
-querystring = require('querystring');    
+querystring = require('querystring');
 app.use(express.static(__dirname + '/public'));
 var clientInfo = {};
 //sends current users to provided sockets
@@ -46,12 +46,12 @@ io.on('connection', function(socket) {
 				timestamp: moment().valueOf()
 			});
 
-		db.user.destroy({
-			where: {
-				name: userData.name
-			}
-		});
-		delete clientInfo[socket.id];
+			db.user.destroy({
+				where: {
+					name: userData.name
+				}
+			});
+			delete clientInfo[socket.id];
 		}
 	});
 
@@ -90,21 +90,29 @@ app.post('/users', urlencodedParser, function(req, res) {
 		if (!user) {
 			return body;
 		}
-		console.log('to home');
-		res.redirect('/');
-		console.log('testing');
-		res.status(200).send();
-		console.log('testing...');
-	}).then(function(body){
-		return db.user.create(body);
-	}).then(function(user){
-		console.log('Name inserted');
-		//res.redirect('./chat.html');
-		query = querystring.stringify({
-	          "name": body.name,
-	          "room": req.body.room
-	        });
-		res.redirect('./chat.html?'+query);
+		//console.log('to home');
+		return;
+		// res.redirect('/');
+		// console.log('testing');
+		// res.status(200).send();
+		// console.log('testing...');
+	}).then(function(body) {
+		if (body)
+			return db.user.create(body);
+		return;
+	}).then(function(user) {
+		if (user) {
+
+			console.log('Name inserted');
+			query = querystring.stringify({
+				"name": body.name,
+				"room": req.body.room
+			});
+			res.redirect('./chat.html?' + query);
+		} else {
+			console.log('to home');
+			res.redirect('/');
+		}
 	}).catch(function() {
 		console.log('error!');
 		res.status(401).send();
