@@ -91,7 +91,7 @@ app.post('/users', urlencodedParser, function(req, res) {
 			return body;
 		}
 		//console.log('to home');
-		return;
+		return null;
 		// res.redirect('/');
 		// console.log('testing');
 		// res.status(200).send();
@@ -99,7 +99,7 @@ app.post('/users', urlencodedParser, function(req, res) {
 	}).then(function(body) {
 		if (body)
 			return db.user.create(body);
-		return;
+		return null;
 	}).then(function(user) {
 		if (user) {
 
