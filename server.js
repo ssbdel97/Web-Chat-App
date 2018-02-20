@@ -115,7 +115,7 @@ app.post('/users', urlencodedParser, function(req, res) {
 			//res.redirect('.');
 			res.redirect(req.get('referer'));
 		}
-	}).catch(function() {
+	}) .catch(function() {
 		console.log('error!');
 		res.status(401).send();
 	});
