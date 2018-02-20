@@ -111,7 +111,8 @@ app.post('/users', urlencodedParser, function(req, res) {
 			res.redirect('./chat.html?' + query);
 		} else {
 			console.log('to home');
-			res.redirect('/');
+			//res.redirect('.');
+			res.redirect(req.get('referer'));
 		}
 	}).catch(function() {
 		console.log('error!');
