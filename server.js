@@ -48,7 +48,7 @@ io.on('connection', function(socket) {
 
 			db.user.destroy({
 				where: {
-					name: userData.name
+					name: userData.name.toLowerCase()
 				}
 			});
 			delete clientInfo[socket.id];
@@ -84,6 +84,7 @@ io.on('connection', function(socket) {
 });
 app.post('/users', urlencodedParser, function(req, res) {
 	var body = _.pick(req.body, 'name');
+	//console.log(body);
 	console.log(body);
 	db.user.authenticate(body).then(function(user) {
 		console.log('user');
@@ -120,7 +121,7 @@ app.post('/users', urlencodedParser, function(req, res) {
 	});
 });
 db.sequelize.sync({
-	//force: true
+	force: true
 }).then(function() {
 	http.listen(PORT, function() {
 		console.log('Server started!!');
