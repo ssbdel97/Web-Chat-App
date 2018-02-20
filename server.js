@@ -120,7 +120,7 @@ app.post('/users', urlencodedParser, function(req, res) {
 	});
 });
 db.sequelize.sync({
-	//force: true
+	force: true
 }).then(function() {
 	http.listen(PORT, function() {
 		console.log('Server started!!');
