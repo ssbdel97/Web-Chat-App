@@ -87,42 +87,65 @@ app.post('/users', urlencodedParser, function(req, res) {
 	//console.log(body);
 	console.log(body);
 	//db.user.authenticate(body).then(function(user) {
+	// db.user.findOne({
+	// 	where: {
+	// 		name: body.name
+	// 	}
+	// }).then(function(user) {
+	// 	console.log('user');
+	// 	if (!user) {
+	// 		return body;
+	// 	}
+	// 	//console.log('to home');
+	// 	return null;
+	// 	// res.redirect('/');
+	// 	// console.log('testing');
+	// 	// res.status(200).send();
+	// 	// console.log('testing...');
+	// }).then(function(body) {
+	// 	if (body)
+	// 		return db.user.create(body);
+	// 	return null;
+	// }).then(function(user) {
+	// 	if (user) {
+
+	// 		console.log('Name inserted');
+	// 		query = querystring.stringify({
+	// 			"name": body.name,
+	// 			"room": req.body.room
+	// 		});
+	// 		res.redirect('./chat.html?' + query);
+	// 	} else {
+	// 		console.log('to home');
+	// 		//res.redirect('.');
+	// 		res.redirect(req.get('referer'));
+	// 	}
+	// }).catch(function() {
+	// 	console.log('error!');
+	// 	res.status(404).send();
+	// });
 	db.user.findOne({
 		where: {
 			name: body.name
 		}
 	}).then(function(user) {
 		console.log('user');
-		if (!user) {
-			return body;
-		}
-		//console.log('to home');
-		return null;
-		// res.redirect('/');
-		// console.log('testing');
-		// res.status(200).send();
-		// console.log('testing...');
-	}).then(function(body) {
-		if (body)
-			return db.user.create(body);
-		return null;
-	}).then(function(user) {
-		if (user) {
+		if(user){
 
-			console.log('Name inserted');
-			query = querystring.stringify({
-				"name": body.name,
-				"room": req.body.room
-			});
-			res.redirect('./chat.html?' + query);
-		} else {
-			console.log('to home');
-			//res.redirect('.');
 			res.redirect(req.get('referer'));
+			return ;
 		}
-	}).catch(function() {
-		console.log('error!');
-		res.status(404).send();
+		db.user.create(body);
+			console.log('Name inserted');
+		query = querystring.stringify({
+			"name": body.name,
+			"room": req.body.room
+		});
+		res.redirect('./chat.html?' + query);
+	
+	}, function(){
+		console.log('index');
+		res.status(401).send();
 	});
 });
 db.sequelize.sync({
