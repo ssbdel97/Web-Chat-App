@@ -126,7 +126,7 @@ app.post('/users', urlencodedParser, function(req, res) {
 	// });
 	db.user.findOne({
 		where: {
-			name: body.name
+			name: body.name.toLowerCase()
 		}
 	}).then(function(user) {
 		console.log('user');
@@ -145,7 +145,7 @@ app.post('/users', urlencodedParser, function(req, res) {
 		}
 	
 	}, function(){
-		console.log('index');
+		console.log('error');
 		res.status(401).send();
 	});
 });
