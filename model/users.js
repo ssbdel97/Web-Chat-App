@@ -25,15 +25,15 @@ module.exports = function(sequelize, DataTypes) {
 					if (typeof body.name !== 'string'){// || typeof body.password !== 'string') {
 						return reject();
 					}
-					user.findOne({
-						where: {
-							name: body.name
-						}
-					}).then(function(user) {
-						resolve(user);
-					}, function(e) {
-						reject();
-					});
+					// user.findOne({
+					// 	where: {
+					// 		name: body.name
+					// 	}
+					// }).then(function(user) {
+					// 	resolve(user);
+					// }, function(e) {
+					// 	reject();
+					// });
 				});
 			}
 		}

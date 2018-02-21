@@ -86,7 +86,12 @@ app.post('/users', urlencodedParser, function(req, res) {
 	var body = _.pick(req.body, 'name');
 	//console.log(body);
 	console.log(body);
-	db.user.authenticate(body).then(function(user) {
+	//db.user.authenticate(body).then(function(user) {
+	db.user.findOne({
+		where: {
+			name: body.name
+		}
+	}).then(function(user) {
 		console.log('user');
 		if (!user) {
 			return body;
@@ -115,7 +120,7 @@ app.post('/users', urlencodedParser, function(req, res) {
 			//res.redirect('.');
 			res.redirect(req.get('referer'));
 		}
-	}) .catch(function() {
+	}).catch(function() {
 		console.log('error!');
 		res.status(404).send();
 	});
