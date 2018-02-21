@@ -117,7 +117,7 @@ app.post('/users', urlencodedParser, function(req, res) {
 		}
 	}) .catch(function() {
 		console.log('error!');
-		res.status(401).send();
+		res.status(404).send();
 	});
 });
 db.sequelize.sync({
