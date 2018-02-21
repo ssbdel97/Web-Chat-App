@@ -134,7 +134,7 @@ app.post('/users', urlencodedParser, function(req, res) {
 
 			res.redirect(req.get('referer'));
 			return ;
-		}
+		} else {
 		db.user.create(body);
 			console.log('Name inserted');
 		query = querystring.stringify({
@@ -142,6 +142,7 @@ app.post('/users', urlencodedParser, function(req, res) {
 			"room": req.body.room
 		});
 		res.redirect('./chat.html?' + query);
+		}
 	
 	}, function(){
 		console.log('index');
